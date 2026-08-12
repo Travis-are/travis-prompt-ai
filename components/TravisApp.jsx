@@ -250,7 +250,7 @@ async function generateAIDraft(biz, conversation, latestVisitorText) {
       ok: false,
       reply: "Thanks for your message — I want to make sure you get accurate information, so I'm flagging this for a team member to confirm.",
       intent: "unclear_request", lead_temperature: "none", captured_info: {}, escalate: true,
-      escalation_reason: "AI drafting failed in demo (simulated network/parse issue).", next_action: "Review manually.", do_not_contact: false,
+      escalation_reason:String(err?.message || err),next_action: "Review manually.", do_not_contact: false,
     };
   }
 }
