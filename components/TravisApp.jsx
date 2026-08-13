@@ -427,11 +427,23 @@ export default function App() {
     setBusinesses(prev => ({ ...prev, [id]: nb }));
     setCurrentBusinessId(id);
     setRole("owner");
+    setBusinesses(prev => ({ ...prev, [id]: nb }));
+    persistBusiness(nb);
+    setCurrentBusinessId(id);
+    setRole("owner");
     setShowSignUp(false);
     setView("onboarding");
   };
 
   const businessList = Object.values(businesses);
+
+  if (!loaded) {
+    return (
+      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: TOKENS.paper, fontFamily: "'IBM Plex Sans', sans-serif", color: TOKENS.cold, fontSize: 14 }}>
+        Loading your workspace…
+      </div>
+    );
+  }
 
   return (
     <div style={{ minHeight: "100vh", background: TOKENS.paper, fontFamily: "'IBM Plex Sans', sans-serif", color: TOKENS.ink }}>
