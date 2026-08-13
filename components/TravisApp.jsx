@@ -8,6 +8,7 @@ import {
   Flame, Sun, Snowflake, ArrowLeftRight, LayoutGrid, FileText, Phone,
   Clock, Tag, Loader2, Edit3, X, Check, LogIn, Sparkles
 } from "lucide-react";
+import { supabase } from "@/lib/supabaseClient";
 
 /* =========================================================================
    TRAVIS PROMPT AI — Business Assistant (MVP Demo)
