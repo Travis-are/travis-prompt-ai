@@ -354,20 +354,59 @@ const NAV = [
   { key: "activate", label: "Review & activate", icon: ShieldCheck },
 ];
 
-export default function App() {
-  const [businesses, setBusinesses] = useState(() => {
-    const demo = seedDemoBusiness();
-    return { [demo.id]: demo };
+function persistBusiness(biz) {
+  supabase.from("businesses").upsert({
+    id: biz.id,
+    data: biz,
+    updated_at: new Date().toISOString(),
+  }).then(({ error }) => {
+    if (error) console.error("Failed to save business to Supabase", error);
   });
+}
+
+export default function App() {
+  const [businesses, setBusinesses] = useState({});
+  const [loaded, setLoaded] = useState(false);
   const [currentBusinessId, setCurrentBusinessId] = useState("biz_demo01");
-  const [role, setRole] = useState("owner"); // super_admin | owner | team | visitor
+  const [role, setRole] = useState("owner");
   const [view, setView] = useState("dashboard");
   const [showSignUp, setShowSignUp] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data, error } = await supabase.from("businesses").select("id, data");
+        if (error) throw error;
+        if (data && data.length > 0) {
+          const loadedBiz = {};
+          data.forEach(row => { loadedBiz[row.id] = row.data; });
+          setBusinesses(loadedBiz);
+          if (!loadedBiz[currentBusinessId]) {
+            setCurrentBusinessId(Object.keys(loadedBiz)[0]);
+          }
+        } else {
+          const demo = seedDemoBusiness();
+          setBusinesses({ [demo.id]: demo });
+          persistBusiness(demo);
+        }
+      } catch (e) {
+        console.error("Failed to load from Supabase, using local demo data", e);
+        const demo = seedDemoBusiness();
+        setBusinesses({ [demo.id]: demo });
+      } finally {
+        setLoaded(true);
+      }
+    })();
+  }, []);
 
   const biz = businesses[currentBusinessId];
 
   const updateBiz = useCallback((id, updater) => {
-    setBusinesses(prev => ({ ...prev, [id]: updater(prev[id]) }));
+    setBusinesses(prev => {
+      const updated = updater(prev[id]);
+      persistBusiness(updated);
+      return { ...prev, [id]: updated };
+    });
   }, []);
 
   const createBusiness = (fields) => {
