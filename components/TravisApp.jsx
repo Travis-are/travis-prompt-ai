@@ -392,6 +392,7 @@ export default function App() {
         }
       } catch (e) {
         console.error("Failed to load from Supabase, using local demo data", e);
+        setDbError(String(e?.message || e));
         const demo = seedDemoBusiness();
         setBusinesses({ [demo.id]: demo });
       } finally {
