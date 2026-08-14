@@ -442,7 +442,7 @@ export default function App() {
   if (!loaded) {
     return (
       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: TOKENS.paper, fontFamily: "'IBM Plex Sans', sans-serif", color: TOKENS.cold, fontSize: 14 }}>
-        Loading your workspace…
+        {dbError ? `Database error: ${dbError}` : "Loading your workspace…"}
       </div>
     );
   }
