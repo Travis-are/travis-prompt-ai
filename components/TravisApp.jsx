@@ -361,6 +361,7 @@ function persistBusiness(biz) {
     updated_at: new Date().toISOString(),
   }).then(({ error }) => {
     if (error) console.error("Failed to save business to Supabase", error);
+    if (error) alert("Supabase save error: " + JSON.stringify(error));
   });
 }
 
