@@ -367,6 +367,7 @@ function persistBusiness(biz) {
 export default function App() {
   const [businesses, setBusinesses] = useState({});
   const [loaded, setLoaded] = useState(false);
+  const [dbError, setDbError] = useState(null);
   const [currentBusinessId, setCurrentBusinessId] = useState("biz_demo01");
   const [role, setRole] = useState("owner");
   const [view, setView] = useState("dashboard");
